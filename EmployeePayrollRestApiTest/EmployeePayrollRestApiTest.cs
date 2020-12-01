@@ -1,6 +1,7 @@
 using EmployeePayrollRestApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,29 @@ namespace EmployeePayrollRestApi
             RestRequest request = new RestRequest("/employee", Method.GET);
             IRestResponse response = client.Execute(request);
             return response;
+        }
+
+        /// <summary>
+        /// UC2
+        /// Givens the employee on post should return added employees.
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployee_OnPost_ShouldReturnAddedEmployees()
+        {
+            /// Arrange
+            RestRequest request = new RestRequest("/employee", Method.POST);
+            JObject jObjectBody = new JObject();
+            jObjectBody.Add("name", "Vidhya");
+            jObjectBody.Add("salary", "27000");
+            /// Act
+            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            /// Assert
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+            EmployeePayrollRestApi dataResponse = JsonConvert.DeserializeObject<EmployeePayrollRestApi>(response.Content);
+            Assert.AreEqual("Vidhya", dataResponse.Name);
+            Assert.AreEqual("27000", dataResponse.Salary);
+            Console.WriteLine(response.Content);
         }
     }
 }
