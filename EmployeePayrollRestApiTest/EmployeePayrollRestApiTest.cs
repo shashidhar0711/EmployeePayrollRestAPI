@@ -128,5 +128,21 @@ namespace EmployeePayrollRestApi
             Assert.AreEqual("27800", dataResponse.Salary);
             Console.WriteLine(response.Content);
         }
+
+        /// <summary>
+        /// UC5
+        /// Givens the employee identifier on delete should return success status.
+        /// </summary>
+        [TestMethod]
+        public void GivenEmployeeId_OnDelete_ShouldReturnSuccessStatus()
+        {
+            /// Arrange
+            RestRequest request = new RestRequest("/employee/1", Method.DELETE);
+            /// Act
+            IRestResponse response = client.Execute(request);
+            /// Assert
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Console.WriteLine(response.Content);
+        }
     }
 }
